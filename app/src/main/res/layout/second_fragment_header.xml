@@ -7,24 +7,27 @@
     android:layout_height="wrap_content">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
+        android:background="@mipmap/colleagueback"
         app:layout_scrollFlags ="enterAlways|scroll"
         android:id="@+id/tool_id">
-        <FrameLayout android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:clipChildren="false"
-            android:layout_centerInParent="true"
-            xmlns:android="http://schemas.android.com/apk/res/android">
-            <com.example.administrator.secondapplication.myclass.ChildViewPager
-                android:id="@+id/id_viewpager"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager
+                android:id="@+id/hicvp"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="100dp"
-                android:layout_marginRight="100dp"
-                android:clipChildren="false"
-                android:layout_height="120dp"
-                android:layout_gravity="center"
+                android:layout_height="match_parent"
+                app:icvp_interpolator="@android:anim/accelerate_decelerate_interpolator"
+                app:icvp_center_page_scale_offset="30dp"
+                app:icvp_min_page_scale_offset="5dp"
+                app:icvp_max_page_scale="0.8"
+                app:icvp_min_page_scale="0.55"
+                app:icvp_medium_scaled="false"
+                app:icvp_scroll_duration="250"
                 >
-            </com.example.administrator.secondapplication.myclass.ChildViewPager>
+            </com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager>
         </FrameLayout>
     </android.support.v7.widget.Toolbar>
 </android.support.design.widget.AppBarLayout>

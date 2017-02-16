@@ -69,10 +69,7 @@ public class BlankFragment extends Fragment {
     private ImageInfo.FeedbackBean.ImagesBean imagesBean = new ImageInfo.FeedbackBean.ImagesBean();
     private List<ImageInfo.FeedbackBean.DimensionsBean> dimensionsBeanList = new ArrayList<>();
     private List<ImageInfo.FeedbackBean.ImagesBean> imagesBeanList = new ArrayList<>();
-    private List<Integer> typeList = new ArrayList<>();
     private List<DetailFeedbackDimensions.DimensionsBean> listdimesion;
-    private LinearLayout ll_first_error;
-    private ImageView but_reload;
     private String urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments";
     private int type;
     private int labelid;
@@ -84,6 +81,7 @@ public class BlankFragment extends Fragment {
     String dimenicon;
     private String feedreq_description;
     private BlankFragment fragment;
+    private WeakReference<BlankFragment> ref;
 
     public BlankFragment() {
         // Required empty public constructor
@@ -125,8 +123,9 @@ public class BlankFragment extends Fragment {
                 mCurrentCounter = 0;
                 //isRefresh = true;
                 urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments?page=1&page_size=10";
-                Log.e(TAG, "onRefresh: "+urlmain);
+                Log.e(TAG, "onRefresh: 1"+urlmain);
                 requestData();
+                Log.e(TAG, "onRefresh: 2" );
             }
         });
 
@@ -167,9 +166,8 @@ public class BlankFragment extends Fragment {
 
         });
 
-
+        fragment= ref.get();
         mRecyclerView.refresh();
-
 
         return view;
     }
@@ -188,28 +186,24 @@ public class BlankFragment extends Fragment {
 
     private class PreviewHandler extends Handler {
 
-        private WeakReference<BlankFragment> ref;
-
         PreviewHandler(BlankFragment fragment) {
             ref = new WeakReference<>(fragment);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            fragment = ref.get();
+
             if (fragment == null || fragment.getActivity().isFinishing()) {
                 return;
             }
             switch (msg.what) {
 
                 case -1:
-                    Log.e(TAG, "handleMessage: "+urlmain);
+                    Log.e(TAG, "handleMessage:1 "+urlmain);
                     initListData(urlmain);
-                    Log.e(TAG, "handleMessage: "+data.size());
-                    fragment.addItems(data);
+                    Log.e(TAG, "handleMessage:2 "+data.size());
 
-                    fragment.mRecyclerView.refreshComplete(REQUEST_COUNT);
-                    fragment.notifyDataSetChanged();
+                   // Log.e(TAG, "handleMessage: 3" );
                     break;
                 case -2:
                     fragment.notifyDataSetChanged();
@@ -261,9 +255,9 @@ public class BlankFragment extends Fragment {
 
 
                             JSONArray jsonarray = jsonObject.getJSONArray("data");
+                            int currentSize = fragment.mMultipleItemAdapter.getItemCount();
                             for (int j = 0; j < jsonarray.length(); j++) {
 
-                                int currentSize = fragment.mMultipleItemAdapter.getItemCount();
                                 if (data.size() + currentSize >= TOTAL_COUNTER) {
                                     break;
                                 }
@@ -280,10 +274,6 @@ public class BlankFragment extends Fragment {
                                 } else {
                                     type=ImageInfo.IMG;
                                 }
-//                                typeList.add(type);
-//                                Log.e(TAG, "typeList: " + typeList.toString());
-//                                recyclerView.setTypeList(typeList);
-//                                Log.e(TAG, "type...............................................................: " + type);
                                 String maindescription = jsonObject3.getString("description");
                                 int likes = jsonObject3.getInt("likes");
                                 int page_views = jsonObject3.getInt("page_views");
@@ -338,13 +328,7 @@ public class BlankFragment extends Fragment {
                                             int dimenstar = jsonObject10.getInt("star");
                                             DetailFeedbackDimensions.DimensionsBean dimensionsBean = new DetailFeedbackDimensions.DimensionsBean(dimencomment,dimenicon,dimenlabel,(double)dimenstar,0.0);
                                             listdimesion.add(dimensionsBean);
-
-                                            //Log.e(TAG, "listdimesion: "+listdimesion );
                                             feedbackBean = new ImageInfo.FeedbackBean(comment,star,dimensionsBeanList,imagesBeanList);
-//                                                ImageInfo imageInfo = new ImageInfo(comment_count, created_at, maindescription, entity_type,feedbackBean , feedbackRequestBean, getid, likes, niceOneBean, page_views, sponsorBean, 0, update_at, type, 0);
-//                                                data.add(imageInfo);
-//                                                setAdapter();
-
                                         }
                                     }
                                     JSONArray jsonArray1 = jsonObject9.getJSONArray("images");
@@ -367,6 +351,9 @@ public class BlankFragment extends Fragment {
 //                            iv_first_rotate.clearAnimation();
 //                            ll_first_rotate.setVisibility(View.INVISIBLE);
                             //setMyAdapter();
+                            fragment.addItems(data);
+                            fragment.mRecyclerView.refreshComplete(REQUEST_COUNT);
+                            fragment.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
