@@ -1,0 +1,26 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.administrator.secondapplication.fourfragment.MeFragment">
+    <include layout="@layout/header_four_fragment"
+        android:id="@+id/include_me_id"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include_me_id"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
+       <android.support.design.widget.TabLayout
+           android:layout_width="match_parent"
+           android:layout_height="50dp"
+           android:background="#ff0"
+           android:id="@+id/tab_me_id"/>
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/vp_me_id"/>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -10,17 +10,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 
 import com.example.administrator.secondapplication.MainActivity;
 import com.example.administrator.secondapplication.R;
-import com.example.administrator.secondapplication.info.DetailFeedbackDimensions;
+import com.example.administrator.secondapplication.bean.DetailFeedbackDimensions;
 import com.example.administrator.secondapplication.model.ImageInfo;
 import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
-import com.github.jdsjlzx.interfaces.OnItemClickListener;
-import com.github.jdsjlzx.interfaces.OnItemLongClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnNetWorkErrorListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
@@ -44,7 +44,7 @@ import okhttp3.Call;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BlankFragment extends Fragment {
+public class BlankFragment extends Fragment implements View.OnClickListener {
 
     /**服务器端一共多少条数据*/
     private static int TOTAL_COUNTER = 0;
@@ -59,7 +59,6 @@ public class BlankFragment extends Fragment {
     private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
     private MultipleItemAdapter mMultipleItemAdapter = null;
 
-   // private FirstFragmentRecyclerAdapter adapter;
     private ArrayList<ImageInfo> data = new ArrayList<>();
 
     private static final String TAG = "FirstFragment";
@@ -68,7 +67,6 @@ public class BlankFragment extends Fragment {
     private ImageInfo.FeedbackBean feedbackBean = new ImageInfo.FeedbackBean();
     private ImageInfo.FeedbackBean.ImagesBean imagesBean = new ImageInfo.FeedbackBean.ImagesBean();
     private List<ImageInfo.FeedbackBean.DimensionsBean> dimensionsBeanList = new ArrayList<>();
-    private List<ImageInfo.FeedbackBean.ImagesBean> imagesBeanList = new ArrayList<>();
     private List<DetailFeedbackDimensions.DimensionsBean> listdimesion;
     private String urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments";
     private int type;
@@ -83,20 +81,35 @@ public class BlankFragment extends Fragment {
     private BlankFragment fragment;
     private WeakReference<BlankFragment> ref;
 
+
+    private ImageView iv_first_rotate;
+    private LinearLayout ll_first_rotate;
+    private Animation rotate;
+    private LinearLayout ll_first_error;
+    private ImageView but_reload;
     public BlankFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
+        iv_first_rotate = (ImageView) view.findViewById(R.id.iv_first_rotate);
+        ll_first_rotate = (LinearLayout) view.findViewById(R.id.ll_first_rotate);
+        ll_first_error = (LinearLayout) view.findViewById(R.id.ll_first_error);
+        but_reload = (ImageView) view.findViewById(R.id.but_reload);
+        but_reload.setOnClickListener(this);
+
+
+        rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_rotate);    //获取“旋转”动画资源
+        ll_first_rotate.setVisibility(View.VISIBLE);
+        iv_first_rotate.startAnimation(rotate);
+
+
         mRecyclerView =(LRecyclerView) view.findViewById(R.id.recyclerview);
         mMultipleItemAdapter = new MultipleItemAdapter(getContext());
-        //getData();
-      //  adapter = new FirstFragmentRecyclerAdapter(getContext(), data);
 
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(mMultipleItemAdapter);
         mRecyclerView.setAdapter(mLRecyclerViewAdapter);
@@ -114,18 +127,19 @@ public class BlankFragment extends Fragment {
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setArrowImageView(R.drawable.ic_pulltorefresh_arrow);
 
-
         mRecyclerView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mMultipleItemAdapter.clear();
                 mLRecyclerViewAdapter.notifyDataSetChanged();//fix bug:crapped or attached views may not be recycled. isScrap:false isAttached:true
+                data.clear();
+                dimensionsBeanList.clear();
+                Log.e(TAG, "onRefresh:3"+data.toString());
                 mCurrentCounter = 0;
                 //isRefresh = true;
                 urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments?page=1&page_size=10";
                 Log.e(TAG, "onRefresh: 1"+urlmain);
                 requestData();
-                Log.e(TAG, "onRefresh: 2" );
             }
         });
 
@@ -135,6 +149,7 @@ public class BlankFragment extends Fragment {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     // loading more
                     numpages++;
+                    data.clear();
                     urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments?page="+ numpages + "&page_size=10";
                     requestData();
                 } else {
@@ -172,7 +187,6 @@ public class BlankFragment extends Fragment {
         return view;
     }
 
-
     private void notifyDataSetChanged() {
         mLRecyclerViewAdapter.notifyDataSetChanged();
     }
@@ -182,6 +196,24 @@ public class BlankFragment extends Fragment {
         mMultipleItemAdapter.addAll(list);
         mCurrentCounter += list.size();
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.but_reload:
+                ll_first_error.setVisibility(View.INVISIBLE);
+                ll_first_rotate.setVisibility(View.VISIBLE);
+                iv_first_rotate.startAnimation(rotate);
+
+                mMultipleItemAdapter.clear();
+                mLRecyclerViewAdapter.notifyDataSetChanged();//fix bug:crapped or attached views may not be recycled. isScrap:false isAttached:true
+                data.clear();
+                mCurrentCounter = 0;
+                urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments?page=1&page_size=10";
+                requestData();
+                break;
+        }
     }
 
     private class PreviewHandler extends Handler {
@@ -201,14 +233,14 @@ public class BlankFragment extends Fragment {
                 case -1:
                     Log.e(TAG, "handleMessage:1 "+urlmain);
                     initListData(urlmain);
-                    Log.e(TAG, "handleMessage:2 "+data.size());
-
-                   // Log.e(TAG, "handleMessage: 3" );
                     break;
                 case -2:
                     fragment.notifyDataSetChanged();
                     break;
                 case -3:
+                    ll_first_error.setVisibility(View.VISIBLE);
+                    iv_first_rotate.clearAnimation();
+                    ll_first_rotate.setVisibility(View.INVISIBLE);
 
                         fragment.mRecyclerView.refreshComplete(REQUEST_COUNT);
                         fragment.notifyDataSetChanged();
@@ -235,9 +267,9 @@ public class BlankFragment extends Fragment {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         Log.e(TAG, "onError: " + e.toString());
-//                        ll_first_error.setVisibility(View.VISIBLE);
-//                        iv_first_rotate.clearAnimation();
-//                        ll_first_rotate.setVisibility(View.INVISIBLE);
+                        ll_first_error.setVisibility(View.VISIBLE);
+                        iv_first_rotate.clearAnimation();
+                        ll_first_rotate.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -294,20 +326,20 @@ public class BlankFragment extends Fragment {
                                     Double niceonecreated_at = jsonObject6.getDouble("created_at");
                                     int niceoneid = jsonObject6.getInt("id");
                                     JSONArray jsonArray = jsonObject6.getJSONArray("label");
+                                    ArrayList<ImageInfo.NiceOneBean.LabelBean> labelBeanArrayList = new ArrayList<>();
                                     for (int n = 0; n < jsonArray.length(); n++) {
                                         JSONObject jsonobject7 = jsonArray.getJSONObject(n);
                                         labelid = jsonobject7.getInt("id");
                                         labelname = jsonobject7.getString("name");
+                                        JSONObject jsonobject8 = jsonObject6.getJSONObject("provider");
+                                        String providerdp = jsonobject8.getString("department");
+                                        providerid = jsonobject8.getInt("id");
+                                        providername = jsonobject8.getString("name");
+                                        ImageInfo.NiceOneBean.LabelBean labelBean = new ImageInfo.NiceOneBean.LabelBean(labelid, labelname);
+                                        labelBeanArrayList.add(labelBean);
+                                        niceOneBean = new ImageInfo.NiceOneBean(niceonecreated_at, niceoneid, new ImageInfo.NiceOneBean.ProviderBean(providerdp, providerid, providername), labelBeanArrayList);
                                     }
-                                    JSONObject jsonobject8 = jsonObject6.getJSONObject("provider");
-                                    String providerdp = jsonobject8.getString("department");
-                                    providerid = jsonobject8.getInt("id");
-                                    providername = jsonobject8.getString("name");
-                                    ArrayList<ImageInfo.NiceOneBean.LabelBean> labelBeanArrayList = new ArrayList<>();
-                                    ImageInfo.NiceOneBean.LabelBean labelBean = new ImageInfo.NiceOneBean.LabelBean(labelid, labelname);
-                                    labelBeanArrayList.add(labelBean);
-                                    niceOneBean = new ImageInfo.NiceOneBean(niceonecreated_at, niceoneid, new ImageInfo.NiceOneBean.ProviderBean(providerdp, providerid, providername), labelBeanArrayList);
-
+                                    Log.e(TAG, "labelBeanArrayList: "+labelBeanArrayList.toString());
                                 } else if(jsonObject5 != null && jsonObject5.length() != 0){
                                     feedreq_description = jsonObject5.getString("description");
                                     feedbackRequestBean = new ImageInfo.FeedbackRequestBean(feedreq_description);
@@ -317,6 +349,7 @@ public class BlankFragment extends Fragment {
                                     String comment = jsonObject9.getString("comment");
                                     int star = jsonObject9.getInt("star");
                                     JSONArray jsonArray = jsonObject9.getJSONArray("dimensions");
+                                    List<ImageInfo.FeedbackBean.ImagesBean> imagesBeanList = new ArrayList<>();
                                     if(jsonArray.length()>0) {
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject jsonObject10 = jsonArray.getJSONObject(i);
@@ -332,25 +365,30 @@ public class BlankFragment extends Fragment {
                                         }
                                     }
                                     JSONArray jsonArray1 = jsonObject9.getJSONArray("images");
+                                   // Log.e(TAG, "jsonArray1: "+jsonArray1.toString());
+
                                     if(jsonArray1.length()>0) {
-                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                        for (int i = 0; i < jsonArray1.length(); i++) {
                                             JSONObject jsonObject11 = jsonArray1.getJSONObject(i);
                                             int imageid = jsonObject11.getInt("id");
                                             String url = jsonObject11.getString("url");
+                                            Log.e(TAG, "url: "+url+"___________"+imageid);
                                             imagesBean = new ImageInfo.FeedbackBean.ImagesBean(imageid,url);
                                             imagesBeanList.add(imagesBean);
                                         }
+                                        Log.e(TAG, "imagesBeanList: "+imagesBeanList.toString());
                                     }
                                     feedbackBean = new ImageInfo.FeedbackBean(comment,star,dimensionsBeanList,imagesBeanList);
                                 }
                                 ImageInfo imageInfo = new ImageInfo(listdimesion,comment_count, created_at, maindescription, entity_type,feedbackBean , feedbackRequestBean, getid, likes, niceOneBean, page_views, sponsorBean, 0, update_at, type, 0);
+
                                 data.add(imageInfo);
                             }
-                            Log.e(TAG, "1: "+data.toString());
-//                            ll_first_error.setVisibility(View.INVISIBLE);
-//                            iv_first_rotate.clearAnimation();
-//                            ll_first_rotate.setVisibility(View.INVISIBLE);
-                            //setMyAdapter();
+                            Log.e(TAG, "data: "+data.toString());
+                            ll_first_error.setVisibility(View.INVISIBLE);
+                            iv_first_rotate.clearAnimation();
+                            ll_first_rotate.setVisibility(View.INVISIBLE);
+
                             fragment.addItems(data);
                             fragment.mRecyclerView.refreshComplete(REQUEST_COUNT);
                             fragment.notifyDataSetChanged();

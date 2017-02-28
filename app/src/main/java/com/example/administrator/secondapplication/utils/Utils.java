@@ -1,49 +1,25 @@
 package com.example.administrator.secondapplication.utils;
 
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.example.administrator.secondapplication.R;
-
+/**
+ * Created by Administrator on 2017/2/20 0020.
+ */
+import android.content.Context;
+import android.util.TypedValue;
 
 /**
- * Created by GIGAMOLE on 8/18/16.
+ * Created by lipy on 2016/9/20.
  */
 public class Utils {
-
-    public static void setupItem(final View view, final LibraryObject libraryObject) {
-        final TextView txt = (TextView) view.findViewById(R.id.txt_item);
-        txt.setText(libraryObject.getTitle());
-
-        final ImageView img = (ImageView) view.findViewById(R.id.img_item);
-        img.setImageResource(libraryObject.getRes());
+    public static boolean isEmpty(String src) {
+        return src == null || src.trim().length() == 0;
     }
 
-    public static class LibraryObject {
+    public static int dp2px(Context context, int dip) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dip * scale + 0.5f);
+    }
 
-        private String mTitle;
-        private int mRes;
-
-        public LibraryObject(final int res, final String title) {
-            mRes = res;
-            mTitle = title;
-        }
-
-        public String getTitle() {
-            return mTitle;
-        }
-
-        public void setTitle(final String title) {
-            mTitle = title;
-        }
-
-        public int getRes() {
-            return mRes;
-        }
-
-        public void setRes(final int res) {
-            mRes = res;
-        }
+    public static int sp2px(Context context, float spValue) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.getResources().getDisplayMetrics());
     }
 }

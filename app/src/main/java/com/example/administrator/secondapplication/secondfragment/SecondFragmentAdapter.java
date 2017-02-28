@@ -1,7 +1,6 @@
 package com.example.administrator.secondapplication.secondfragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.administrator.secondapplication.R;
-import com.example.administrator.secondapplication.info.ListEntity;
+import com.example.administrator.secondapplication.bean.ListEntity;
 import com.example.administrator.secondapplication.lrecyclertext.AppToast;
 import com.example.administrator.secondapplication.myclass.GlideCircleTransform;
 

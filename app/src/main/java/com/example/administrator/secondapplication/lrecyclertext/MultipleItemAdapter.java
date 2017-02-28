@@ -1,5 +1,6 @@
 package com.example.administrator.secondapplication.lrecyclertext;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -11,11 +12,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.cyy.yimagebrowser.YImageBrowser;
 import com.example.administrator.secondapplication.R;
-import com.example.administrator.secondapplication.info.DetailFeedbackDimensions;
+import com.example.administrator.secondapplication.bean.DetailFeedbackDimensions;
+import com.example.administrator.secondapplication.mlayout.AutoGridLayout;
+import com.example.administrator.secondapplication.mlayout.NormalGridLayout;
 import com.example.administrator.secondapplication.model.ImageInfo;
 import com.example.administrator.secondapplication.myclass.GlideCircleTransform;
+import com.example.administrator.secondapplication.myclass.OnItemClick;
 import com.example.administrator.secondapplication.myclass.RelativeDateFormat;
+import com.example.administrator.secondapplication.myclass.SearchTipsGroupView;
 import com.hedgehog.ratingbar.RatingBar;
 
 import java.util.ArrayList;
@@ -27,17 +33,16 @@ import java.util.List;
  * Created by Lzx on 2016/12/30.
  */
 
-public class MultipleItemAdapter extends MultiAdapter<ImageInfo> {
+public class MultipleItemAdapter extends MultiAdapter<ImageInfo> implements OnItemClick {
     private Context context;
     private static final String TAG = "MultipleItemAdapter";
+    final List<String> stringList = new ArrayList<>();
     public MultipleItemAdapter(Context context) {
         super(context);
         this.context=context;
         addItemType(ImageInfo.TEXT, R.layout.item_image);
         addItemType(ImageInfo.IMG, R.layout.item_list);
     }
-
-
 
     @Override
     public void onBindItemHolder(SuperViewHolder holder, int position) {
@@ -52,13 +57,21 @@ public class MultipleItemAdapter extends MultiAdapter<ImageInfo> {
             default:
                 break;
         }
-
     }
 
     private void bindTextItem(SuperViewHolder holder, ImageInfo item) {
        // TextView textView = holder.getView(R.id.info_text);
       //  textView.setText(item.getTitle());
-
+        SearchTipsGroupView searchTipsGroupView=holder.getView(R.id.search_tips);
+        String items[];
+        List<ImageInfo.NiceOneBean.LabelBean> list=item.getNice_one().getLabel();
+        items= new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            items[i]=list.get(i).getName();
+        }
+        if (searchTipsGroupView != null && items.toString().length()!=0) {
+            searchTipsGroupView.initLabelViews(items,this);
+        }
     }
 
     private void bindPicItem(SuperViewHolder holder, ImageInfo item) {
@@ -67,6 +80,28 @@ public class MultipleItemAdapter extends MultiAdapter<ImageInfo> {
 
         //textView.setText(item.getTitle());
        // avatarImage.setImageResource(R.mipmap.ic_launcher);
+        stringList.clear();
+        NormalGridLayout layout = holder.getView(R.id.autoGridLayout);
+        List<ImageInfo.FeedbackBean.ImagesBean> imageslist = item.getFeedback().getImages();
+        //Log.e(TAG, imageslist.size()+"----imageslist----: "+imageslist.toString());
+        for (int i = 0; i < imageslist.size(); i++) {
+            stringList.add(imageslist.get(i).getUrl());
+        }
+        Log.e(TAG, stringList.size()+"---stringList---: "+stringList.toString());
+        layout.setHowMuchImageView(stringList,true);
+        layout.setItemClickListener(new AutoGridLayout.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ///这里holderUri应该传入缩略图的Uri ，但是测试没有缩略图，所以传入的大图。
+                //
+                // sorry
+                YImageBrowser.newInstance().startBrowserImage((Activity) context ,stringList, stringList , view , position);
+            }
+        });
+        if(stringList.size()==0){
+            layout.setVisibility(View.GONE);
+        }
+        Log.e(TAG, "stringList: "+stringList.size());
         ListView lv_ratingmoments=holder.getView(R.id.lv_ratingmoments);
 
         ImageView avatar = holder.getView(R.id.avatar_image);
@@ -85,7 +120,7 @@ public class MultipleItemAdapter extends MultiAdapter<ImageInfo> {
         first_commentsnum.setText(item.getComment_count()+"");
         TextView tv_contentdescription=holder.getView(R.id.tv_contentdescription);
         LinearLayout ll_first_feedback=(LinearLayout)holder.getView(R.id.ll_first_feedback);
-        // layout = (NormalGridLayout) itemView.findViewById(R.id.autoGridLayout);
+
         TextView tvreadnum = (TextView)holder.getView(R.id.first_readnum);
         //tvcommentsnum=(TextView) itemView.findViewById(R.id.first_commentsnum);
         LinearLayout ll_moment_gone=(LinearLayout)holder.getView(R.id.ll_moment_gone);
@@ -143,5 +178,10 @@ public class MultipleItemAdapter extends MultiAdapter<ImageInfo> {
         // params.height设置ListView完全显示需要的高度
         params.height = totalHeight+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    @Override
+    public void onClick(int position) {
+
     }
 }

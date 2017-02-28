@@ -2,10 +2,9 @@ package com.example.administrator.secondapplication.model;
 
 
 
-import com.example.administrator.secondapplication.info.DetailFeedbackDimensions;
+import com.example.administrator.secondapplication.bean.DetailFeedbackDimensions;
 import com.example.administrator.secondapplication.lrecyclertext.MultiItemEntity;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -381,6 +380,14 @@ public class ImageInfo implements MultiItemEntity {
             public ImagesBean(int id, String url) {
                 this.id = id;
                 this.url = url;
+            }
+
+            @Override
+            public String toString() {
+                return "ImagesBean{" +
+                        "id=" + id +
+                        ", url='" + url + '\'' +
+                        '}';
             }
 
             public ImagesBean() {

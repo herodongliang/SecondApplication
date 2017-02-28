@@ -1,65 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.administrator.secondapplication.MainActivity">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@drawable/topcolor"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Moments"
-            android:id="@+id/tv_title"
-            android:textColor="#fff"
-            android:textSize="22dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            />
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:layout_marginRight="10dp"
-                android:visibility="invisible"
-                android:src="@mipmap/searchicon"
-                android:layout_marginTop="20dp"
-                android:id="@+id/iv_search_colleagues"
-                android:layout_alignParentRight="true"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:textSize="15dp"
-                android:visibility="invisible"
-                android:layout_marginTop="25dp"
-                android:id="@+id/tv_setting"
-                android:textColor="#fff"
-                android:text="Setting"/>
-        </FrameLayout>
-    </RelativeLayout>
-    <com.ycl.tabview.library.TabView
-        android:id="@+id/tabView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:tab_textViewSelColor="#16a6b7"
-        app:tab_textViewUnSelColor="#666666"
-        app:tab_tabViewBackgroundColor="#f1f3f3"
-        app:imageViewTextViewMargin="2dip"
-        app:tab_imageViewHeight="20dip"
-        app:tab_imageViewWidth="20dip"
-        app:tab_tabViewDefaultPosition="0"
-        app:tab_tabViewGravity="bottom"
-        app:tab_tabViewHeight="50dip"
-        app:tab_textViewSize="12sp">
-    </com.ycl.tabview.library.TabView>
-</LinearLayout>
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@drawable/topcolor"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Moments"
+                android:id="@+id/tv_title"
+                android:textColor="#fff"
+                android:textSize="22dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:layout_marginRight="10dp"
+                    android:visibility="invisible"
+                    android:src="@mipmap/searchicon"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/iv_search_colleagues"
+                    android:layout_alignParentRight="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:textSize="15dp"
+                    android:visibility="invisible"
+                    android:layout_marginTop="25dp"
+                    android:id="@+id/tv_setting"
+                    android:textColor="#fff"
+                    android:text="Setting"/>
+            </FrameLayout>
+        </RelativeLayout>
+        <com.example.administrator.secondapplication.popfragment.TabView
+            android:id="@+id/tabView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:tab_textViewSelColor="#16a6b7"
+            app:tab_textViewUnSelColor="#666666"
+            app:tab_tabViewBackgroundColor="#f1f3f3"
+            app:imageViewTextViewMargin="2dip"
+            app:tab_imageViewHeight="20dip"
+            app:tab_imageViewWidth="20dip"
+            app:tab_tabViewDefaultPosition="0"
+            app:tab_tabViewGravity="bottom"
+            app:tab_tabViewHeight="50dip"
+            app:tab_textViewSize="12sp">
+        </com.example.administrator.secondapplication.popfragment.TabView>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        >
+        <RelativeLayout
+            android:id="@+id/rl_click"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="45dip"
+                android:layout_height="45dip"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/oval5" />
+
+            <ImageView
+                android:id="@+id/iv_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/add" />
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/nopresstext"
+            android:textSize="12sp"
+            android:text="ask/give"/>
+    </FrameLayout>
+</FrameLayout>

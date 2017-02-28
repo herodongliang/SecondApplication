@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.administrator.secondapplication.R;
 import com.example.administrator.secondapplication.adapters.HorizontalPagerAdapter;
-import com.example.administrator.secondapplication.info.ListEntity;
+import com.example.administrator.secondapplication.bean.ListEntity;
 import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
 
 import java.util.ArrayList;

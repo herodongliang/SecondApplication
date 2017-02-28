@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import com.example.administrator.secondapplication.R;
-import com.example.administrator.secondapplication.info.DetailFeedbackDimensions;
+import com.example.administrator.secondapplication.bean.DetailFeedbackDimensions;
 import com.hedgehog.ratingbar.RatingBar;
 
 import java.util.List;

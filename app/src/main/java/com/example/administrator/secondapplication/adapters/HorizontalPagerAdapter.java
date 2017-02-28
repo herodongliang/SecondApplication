@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.administrator.secondapplication.R;
-import com.example.administrator.secondapplication.utils.Utils;
-import com.gigamole.infinitecycleviewpager.VerticalInfiniteCycleViewPager;
+import com.example.administrator.secondapplication.utils.AnotherUtils;
 
 
 /**
@@ -16,20 +15,20 @@ import com.gigamole.infinitecycleviewpager.VerticalInfiniteCycleViewPager;
  */
 public class HorizontalPagerAdapter extends PagerAdapter {
 
-    private final Utils.LibraryObject[] LIBRARIES = new Utils.LibraryObject[]{
-            new Utils.LibraryObject(
+    private final AnotherUtils.LibraryObject[] LIBRARIES = new AnotherUtils.LibraryObject[]{
+            new AnotherUtils.LibraryObject(
                     R.mipmap.image1,
                     "Strategy"
             ),
-            new Utils.LibraryObject(
+            new AnotherUtils.LibraryObject(
                     R.mipmap.image2,
                     "Design"
             ),
-            new Utils.LibraryObject(
+            new AnotherUtils.LibraryObject(
                     R.mipmap.image3,
                     "Development"
             ),
-            new Utils.LibraryObject(
+            new AnotherUtils.LibraryObject(
                     R.mipmap.image4,
                     "Quality Assurance"
             )
@@ -60,7 +59,7 @@ public class HorizontalPagerAdapter extends PagerAdapter {
     public Object instantiateItem(final ViewGroup container, final int position) {
         final View view;
         view = mLayoutInflater.inflate(R.layout.item, container, false);
-        Utils.setupItem(view, LIBRARIES[position]);
+        AnotherUtils.setupItem(view, LIBRARIES[position]);
         container.addView(view);
         return view;
     }
