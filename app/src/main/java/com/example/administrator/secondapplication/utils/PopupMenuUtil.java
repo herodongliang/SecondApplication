@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,13 @@ import android.widget.Toast;
 
 import com.example.administrator.secondapplication.MainActivity;
 import com.example.administrator.secondapplication.R;
+import com.example.administrator.secondapplication.lrecyclertext.AppToast;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.io.File;
+
+import okhttp3.Call;
 
 
 /**
@@ -153,10 +162,26 @@ public class PopupMenuUtil {
                         _close();
                         break;
                     case 3:
-                        Intent intent2 = new Intent(context, MainActivity.class);
-                        intent2.putExtra("type",1);
-                        context.startActivity(intent2);
-                        _close();
+//                        Intent intent2 = new Intent(context, MainActivity.class);
+//                        intent2.putExtra("type",1);
+//                        context.startActivity(intent2);
+//                        _close();
+                        OkHttpUtils.post().url("http://tw.chinacloudapp.cn:8001/feedback_star/api/images")
+                                .addHeader("Authorization",MainActivity.token)
+                                .addFile("file-1","file1", new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera/IMG_20161126_210304.jpg"))
+                                .build().execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                Log.e(TAG, "onError: "+e.toString());
+                                AppToast.makeShortToast(context,"Post Error...");
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Log.e(TAG, "onResponse: "+response);
+                                AppToast.makeShortToast(context,"Bingo!!!");
+                            }
+                        });
                         break;
                 }
             }

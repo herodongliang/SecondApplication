@@ -10,9 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-import com.cyy.yimagebrowser.YImageBrowser;
 import com.example.administrator.secondapplication.R;
 import com.example.administrator.secondapplication.bean.DetailFeedbackDimensions;
 import com.example.administrator.secondapplication.mlayout.AutoGridLayout;
@@ -23,7 +21,6 @@ import com.example.administrator.secondapplication.myclass.OnItemClick;
 import com.example.administrator.secondapplication.myclass.RelativeDateFormat;
 import com.example.administrator.secondapplication.myclass.SearchTipsGroupView;
 import com.hedgehog.ratingbar.RatingBar;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +33,7 @@ import java.util.List;
 public class MultipleItemAdapter extends MultiAdapter<ImageInfo> implements OnItemClick {
     private Context context;
     private static final String TAG = "MultipleItemAdapter";
-    final List<String> stringList = new ArrayList<>();
+    private List<ImageInfo.NiceOneBean.LabelBean> list = new ArrayList<>();
     public MultipleItemAdapter(Context context) {
         super(context);
         this.context=context;
@@ -60,11 +57,9 @@ public class MultipleItemAdapter extends MultiAdapter<ImageInfo> implements OnIt
     }
 
     private void bindTextItem(SuperViewHolder holder, ImageInfo item) {
-       // TextView textView = holder.getView(R.id.info_text);
-      //  textView.setText(item.getTitle());
         SearchTipsGroupView searchTipsGroupView=holder.getView(R.id.search_tips);
         String items[];
-        List<ImageInfo.NiceOneBean.LabelBean> list=item.getNice_one().getLabel();
+        list =item.getNice_one().getLabel();
         items= new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
             items[i]=list.get(i).getName();
@@ -75,33 +70,7 @@ public class MultipleItemAdapter extends MultiAdapter<ImageInfo> implements OnIt
     }
 
     private void bindPicItem(SuperViewHolder holder, ImageInfo item) {
-      //  TextView textView = holder.getView(R.id.info_text);
-        //ImageView avatarImage = holder.getView(R.id.avatar_image);
 
-        //textView.setText(item.getTitle());
-       // avatarImage.setImageResource(R.mipmap.ic_launcher);
-        stringList.clear();
-        NormalGridLayout layout = holder.getView(R.id.autoGridLayout);
-        List<ImageInfo.FeedbackBean.ImagesBean> imageslist = item.getFeedback().getImages();
-        //Log.e(TAG, imageslist.size()+"----imageslist----: "+imageslist.toString());
-        for (int i = 0; i < imageslist.size(); i++) {
-            stringList.add(imageslist.get(i).getUrl());
-        }
-        Log.e(TAG, stringList.size()+"---stringList---: "+stringList.toString());
-        layout.setHowMuchImageView(stringList,true);
-        layout.setItemClickListener(new AutoGridLayout.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                ///这里holderUri应该传入缩略图的Uri ，但是测试没有缩略图，所以传入的大图。
-                //
-                // sorry
-                YImageBrowser.newInstance().startBrowserImage((Activity) context ,stringList, stringList , view , position);
-            }
-        });
-        if(stringList.size()==0){
-            layout.setVisibility(View.GONE);
-        }
-        Log.e(TAG, "stringList: "+stringList.size());
         ListView lv_ratingmoments=holder.getView(R.id.lv_ratingmoments);
 
         ImageView avatar = holder.getView(R.id.avatar_image);

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
+import com.example.administrator.secondapplication.model.ImageInfo;
 import com.example.administrator.secondapplication.myclass.CustomProgress;
 import com.example.administrator.secondapplication.myclass.LoadDialogActivity;
 import com.example.administrator.secondapplication.utils.EnCodeUtils;
@@ -54,6 +56,7 @@ public class AddBasicActivity extends Activity implements View.OnClickListener{
     private String url,s;
     private String token,access_token;
     private InputMethodManager imm;
+    private ImageView iv_profilephoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +83,7 @@ public class AddBasicActivity extends Activity implements View.OnClickListener{
     }
     private void initview() {
 
-
+        iv_profilephoto = (ImageView) findViewById(R.id.iv_profilephoto);
         ll_profilephoto = (LinearLayout) findViewById(R.id.ll_profile_photo);
         ll_profilephoto.setOnClickListener(this);
         iv_back = (ImageView) findViewById(R.id.iv_back_basic);
@@ -93,6 +96,7 @@ public class AddBasicActivity extends Activity implements View.OnClickListener{
         et_lastname.setSelection(et_lastname.getText().length());
         et_department.setSelection(et_department.getText().length());
         but_next = (Button) findViewById(R.id.but_basic_next);
+        iv_profilephoto.setOnClickListener(this);
         iv_back.setOnClickListener(this);
         but_next.setOnClickListener(this);
 
@@ -101,6 +105,10 @@ public class AddBasicActivity extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.iv_profilephoto:
+
+
+                break;
             case R.id.iv_back_basic:
                 finish();
                 overridePendingTransition(R.anim.back_enter,R.anim.back_exit);

@@ -17,7 +17,7 @@
            android:layout_height="50dp"
            android:background="#ff0"
            android:id="@+id/tab_me_id"/>
-        <android.support.v4.view.ViewPager
+        <com.example.administrator.secondapplication.fourfragment.MyViewPager
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

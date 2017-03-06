@@ -58,16 +58,8 @@ public class BlankFragment extends Fragment implements View.OnClickListener {
     private LRecyclerView mRecyclerView = null;
     private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
     private MultipleItemAdapter mMultipleItemAdapter = null;
-
-    private ArrayList<ImageInfo> data = new ArrayList<>();
-
     private static final String TAG = "FirstFragment";
-    private ImageInfo.NiceOneBean niceOneBean = new ImageInfo.NiceOneBean();
-    private ImageInfo.FeedbackRequestBean feedbackRequestBean = new ImageInfo.FeedbackRequestBean();
-    private ImageInfo.FeedbackBean feedbackBean = new ImageInfo.FeedbackBean();
-    private ImageInfo.FeedbackBean.ImagesBean imagesBean = new ImageInfo.FeedbackBean.ImagesBean();
-    private List<ImageInfo.FeedbackBean.DimensionsBean> dimensionsBeanList = new ArrayList<>();
-    private List<DetailFeedbackDimensions.DimensionsBean> listdimesion;
+
     private String urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments";
     private int type;
     private int labelid;
@@ -80,7 +72,6 @@ public class BlankFragment extends Fragment implements View.OnClickListener {
     private String feedreq_description;
     private BlankFragment fragment;
     private WeakReference<BlankFragment> ref;
-
 
     private ImageView iv_first_rotate;
     private LinearLayout ll_first_rotate;
@@ -132,11 +123,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener {
             public void onRefresh() {
                 mMultipleItemAdapter.clear();
                 mLRecyclerViewAdapter.notifyDataSetChanged();//fix bug:crapped or attached views may not be recycled. isScrap:false isAttached:true
-                data.clear();
-                dimensionsBeanList.clear();
-                Log.e(TAG, "onRefresh:3"+data.toString());
                 mCurrentCounter = 0;
-                //isRefresh = true;
                 urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments?page=1&page_size=10";
                 Log.e(TAG, "onRefresh: 1"+urlmain);
                 requestData();
@@ -149,7 +136,6 @@ public class BlankFragment extends Fragment implements View.OnClickListener {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     // loading more
                     numpages++;
-                    data.clear();
                     urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments?page="+ numpages + "&page_size=10";
                     requestData();
                 } else {
@@ -208,7 +194,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener {
 
                 mMultipleItemAdapter.clear();
                 mLRecyclerViewAdapter.notifyDataSetChanged();//fix bug:crapped or attached views may not be recycled. isScrap:false isAttached:true
-                data.clear();
+               // data.clear();
                 mCurrentCounter = 0;
                 urlmain="http://tw.chinacloudapp.cn:8001/feedback_star/api/moments?page=1&page_size=10";
                 requestData();
@@ -264,6 +250,15 @@ public class BlankFragment extends Fragment implements View.OnClickListener {
                 .addHeader("Authorization", MainActivity.token)
                 .build()
                 .execute(new StringCallback() {
+                    private ArrayList<ImageInfo> data = new ArrayList<>();
+                    private ImageInfo.NiceOneBean niceOneBean = new ImageInfo.NiceOneBean();
+                    private ImageInfo.FeedbackRequestBean feedbackRequestBean = new ImageInfo.FeedbackRequestBean();
+                    private ImageInfo.FeedbackBean feedbackBean = new ImageInfo.FeedbackBean();
+                    private ImageInfo.FeedbackBean.ImagesBean imagesBean = new ImageInfo.FeedbackBean.ImagesBean();
+                    private List<ImageInfo.FeedbackBean.DimensionsBean> dimensionsBeanList = new ArrayList<>();
+                    private List<DetailFeedbackDimensions.DimensionsBean> listdimesion=new ArrayList<>();
+                    final List<String> stringList = new ArrayList<>();
+                    List<ImageInfo.FeedbackBean.ImagesBean> imageslist = new ArrayList<ImageInfo.FeedbackBean.ImagesBean>();
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         Log.e(TAG, "onError: " + e.toString());
@@ -372,6 +367,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener {
                                             JSONObject jsonObject11 = jsonArray1.getJSONObject(i);
                                             int imageid = jsonObject11.getInt("id");
                                             String url = jsonObject11.getString("url");
+                                            stringList.add(url);
                                             Log.e(TAG, "url: "+url+"___________"+imageid);
                                             imagesBean = new ImageInfo.FeedbackBean.ImagesBean(imageid,url);
                                             imagesBeanList.add(imagesBean);
@@ -380,7 +376,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener {
                                     }
                                     feedbackBean = new ImageInfo.FeedbackBean(comment,star,dimensionsBeanList,imagesBeanList);
                                 }
-                                ImageInfo imageInfo = new ImageInfo(listdimesion,comment_count, created_at, maindescription, entity_type,feedbackBean , feedbackRequestBean, getid, likes, niceOneBean, page_views, sponsorBean, 0, update_at, type, 0);
+                                ImageInfo imageInfo = new ImageInfo(stringList,listdimesion,comment_count, created_at, maindescription, entity_type,feedbackBean , feedbackRequestBean, getid, likes, niceOneBean, page_views, sponsorBean, 0, update_at, type, 0);
 
                                 data.add(imageInfo);
                             }

@@ -43,7 +43,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fresco.initialize(MainActivity.this);
+
         setContentView(R.layout.activity_main);
         initStatusBar();
         initViews();

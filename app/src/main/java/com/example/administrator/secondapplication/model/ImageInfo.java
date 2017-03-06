@@ -46,6 +46,15 @@ public class ImageInfo implements MultiItemEntity {
     private double updated_at;
     private int type;
     private List<DetailFeedbackDimensions.DimensionsBean> listdimesion;
+    private List<String> stringList;
+
+    public List<String> getStringList() {
+        return stringList;
+    }
+
+    public void setStringList(List<String> stringList) {
+        this.stringList = stringList;
+    }
 
     public List<DetailFeedbackDimensions.DimensionsBean> getListdimesion() {
         return listdimesion;
@@ -78,7 +87,8 @@ public class ImageInfo implements MultiItemEntity {
         this.feedback = feedback;
     }
 
-    public ImageInfo(List<DetailFeedbackDimensions.DimensionsBean> listdimesion,int comment_count, double created_at, String description, String entity_type, FeedbackBean feedback, FeedbackRequestBean feedback_request, int id, int likes, NiceOneBean nice_one, int page_views, SponsorBean sponsor, int sponsor_id, double updated_at, int type, int entity_id) {
+    public ImageInfo(List<String> stringList,List<DetailFeedbackDimensions.DimensionsBean> listdimesion,int comment_count, double created_at, String description, String entity_type, FeedbackBean feedback, FeedbackRequestBean feedback_request, int id, int likes, NiceOneBean nice_one, int page_views, SponsorBean sponsor, int sponsor_id, double updated_at, int type, int entity_id) {
+        this.stringList=stringList;
         this.listdimesion=listdimesion;
         this.comment_count = comment_count;
         this.created_at = created_at;

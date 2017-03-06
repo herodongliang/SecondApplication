@@ -40,8 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
-
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -65,7 +63,7 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private ArrayList<Messages> list=new ArrayList<>();
+
     private static final String TAG = "ThirdFragment";
     private int getoneid;
     private String content;
@@ -132,8 +130,9 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
             public void onRefresh() {
 
                 adapter.clear();
+               // recycler_third.refreshComplete(0);
                 mLRecyclerViewAdapter.notifyDataSetChanged();//fix bug:crapped or attached views may not be recycled. isScrap:false isAttached:true
-                list.clear();
+               // list.clear();
                 mCurrentCounter = 0;
                 numpages=0;
                 lastlink="http://tw.chinacloudapp.cn:8001/feedback_star/api/messages?page=1&page_size=10";
@@ -147,7 +146,7 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
 
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     // loading more
-                    list.clear();
+                   // list.clear();
                     numpages++;
                     lastlink="http://tw.chinacloudapp.cn:8001/feedback_star/api/messages?page="+ numpages + "&page_size=10";
                     requestData();
@@ -210,7 +209,7 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
                 .build()
                 .execute(new StringCallback() {
                     private String avatar;
-
+                    ArrayList<Messages> list=new ArrayList<>();
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         //Log.e(TAG, "onError: "+e.toString());
@@ -267,7 +266,6 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
                                             tv_nomessage.setVisibility(View.GONE);
                                             Log.e(TAG, "onResponse: GONE");
                                         }
-
                                     }
                                 }else{
                                     Log.e(TAG, "error: " );
@@ -312,7 +310,7 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
 
               adapter.clear();
               mLRecyclerViewAdapter.notifyDataSetChanged();//fix bug:crapped or attached views may not be recycled. isScrap:false isAttached:true
-              list.clear();
+             // list.clear();
               mCurrentCounter = 0;
               numpages=0;
               lastlink="http://tw.chinacloudapp.cn:8001/feedback_star/api/messages?page=1&page_size=10";

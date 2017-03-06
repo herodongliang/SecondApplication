@@ -3,7 +3,6 @@ package com.example.administrator.secondapplication.myclass;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.RelativeLayout;
 
 import com.example.administrator.secondapplication.R;

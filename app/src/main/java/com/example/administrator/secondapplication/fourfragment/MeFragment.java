@@ -19,15 +19,13 @@ import java.util.List;
  */
 public class MeFragment extends Fragment {
 
-
     private TabLayout tab_me;
-    private ViewPager vp_me;
+    private MyViewPager vp_me;
     private List<Fragment> listfragment = new ArrayList<>();
     private List<String> liststring = new ArrayList<>();
     public MeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,7 +33,7 @@ public class MeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         tab_me = (TabLayout) view.findViewById(R.id.tab_me_id);
-        vp_me = (ViewPager) view.findViewById(R.id.vp_me_id);
+        vp_me = (MyViewPager) view.findViewById(R.id.vp_me_id);
         liststring.add("one");
         liststring.add("two");
         listfragment.add(new MeOneFragment());
