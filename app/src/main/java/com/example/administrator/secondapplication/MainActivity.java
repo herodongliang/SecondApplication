@@ -25,7 +25,6 @@ import com.example.administrator.secondapplication.secondfragment.SecondFragment
 import com.example.administrator.secondapplication.thirdfragment.ThirdFragment;
 import com.example.administrator.secondapplication.utils.EnCodeUtils;
 import com.example.administrator.secondapplication.utils.PopupMenuUtil;
-import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.util.ArrayList;
 import java.util.List;
